@@ -16,4 +16,40 @@ export default class HTMLElementUtil {
         };
     };
 
+    static innerScript(element: HTMLElement | string, script: string){ // DOM中执行script
+        let container: HTMLElement = null;
+        if(typeof element == 'object'){
+            container = element;
+        }else if(typeof element == 'string'){
+            container = document.getElementById(element);
+        };
+        const div = document.createElement('div');
+        div.innerHTML = script;
+        const children = div.children;
+        for (let i = 0; i < children.length; i++) {
+            const el = children[i];
+            const nodeName = el.nodeName;
+            const tag = document.createElement(nodeName);
+            const attrNames = el.getAttributeNames();
+            attrNames.forEach(attrName => {
+                const attrValue = el.getAttribute(attrName);
+                tag.setAttribute(attrName,attrValue);
+            });
+            container.appendChild(tag);
+        };
+    };
+
+    static clickElementSelf(e: any, classOrId: string){ // 判断点击位置是否在指定DOM元素中
+        let flag = true;
+        let path = e.path || (e.composedPath && e.composedPath()) || [];
+        for (let i = 0; i < path.length; i++) {
+            const el = path[i];
+            if((el && el.id == classOrId) || (el.className && typeof el.className == 'string' && el.className.includes(classOrId))){
+                flag = false;
+                break;
+            };
+        };
+        return flag;
+    };
+
 }
