@@ -52,4 +52,32 @@ export default class HTMLElementUtil {
         return flag;
     };
 
+    static elementParabolaAnimation(el: Element, endX: number, endY: number){
+        setTimeout(() => {
+            const sx = el.getBoundingClientRect().x, sy = el.getBoundingClientRect().y;
+            const div = el.cloneNode(true) as HTMLElement;
+            div.style.position = 'fixed';
+            div.style.left = sx + 'px';
+            div.style.top = sy + 'px';
+            div.style.zIndex = '9999';
+            div.style.transition = 'left 0s, top 0s';
+            div.style.opacity = '1';
+            el.parentElement.appendChild(div);
+            setTimeout(() => {
+                div.style.transition = 'left 0.5s linear, top 0.5s ease-in, opacity 0.1s ease-in';
+                div.style.left = endX + 'px';
+                div.style.top = endY + 'px';
+            }, 20);
+            setTimeout(() => {
+                div.style.opacity = '0.5';
+            }, 300);
+            setTimeout(() => {
+                div.style.opacity = '0';
+            }, 400);
+            setTimeout(() => {
+                el.parentElement.removeChild(div);
+            }, 650);
+        }, 10);
+    };
+
 }
